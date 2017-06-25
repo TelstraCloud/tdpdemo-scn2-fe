@@ -126,16 +126,11 @@ app.get('/', function (req, res) {
   var n = 1000;
   if (requested_n) { n = parseInt(requested_n)}
   
-var pagecount = "";
-var options = {
-  host: 'http://nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io/',
-  port: 80,
-  path: '/pagecount'
-};
+var pagecount = {};
 
 http.get('http://nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io/pagecount', function(resp){
   resp.on('data', function(chunk){
-    pagecount = JSON.parse(chunk);
+    pagecount = chunk;
     console.log("Page count: " + pagecount);
     var primesdata = calcPrimes(n);
     res.render('index.html', { 
