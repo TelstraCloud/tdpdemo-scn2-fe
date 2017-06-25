@@ -123,15 +123,16 @@ var getK8SInfo = function() {
 
 app.get('/', function (req, res) {
   var requested_n = req.query.num;
-  var n = 1000;
+  var n = 1000000;
   if (requested_n) { n = parseInt(requested_n)}
   
 var pagecount = {};
 
+// TODO: replace pagecount with array of primes
 http.get('http://nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io/pagecount', function(resp){
   resp.on('data', function(chunk){
-    pagecount = chunk;
-    console.log("Page count: " + pagecount.pageCount);
+    pagecount = JSON.parse(chunk).pageCount; //should ideally have a try block around this
+    console.log("Page count: " + pagecount);
     var primesdata = calcPrimes(n);
     res.render('index.html', { 
                 pname : platformname, 
@@ -160,7 +161,7 @@ http.get('http://nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io/pageco
 
 app.get('/pagecount', function (req, res) {
   
-    res.send('{ pageCount: -1 }');
+    res.send('{"pageCount": -1 }');
 });
 
 // error handling
