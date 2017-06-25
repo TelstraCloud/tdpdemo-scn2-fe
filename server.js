@@ -3,9 +3,10 @@ var express = require('express'),
     fs      = require('fs'),
     app     = express(),
     eps     = require('ejs'),
-    morgan  = require('morgan');
+    morgan  = require('morgan'),
+    http = require('http');
     
-Object.assign=require('object-assign')
+Object.assign=require('object-assign');
 
 app.engine('html', require('ejs').renderFile);
 app.use(morgan('combined'))
@@ -118,22 +119,49 @@ var getK8SInfo = function() {
     console.log("pods: " + JSON.stringify(err || result, null, 2));
   });
   return JSON.stringify(core);
-}
-
+};
 
 app.get('/', function (req, res) {
   var requested_n = req.query.num;
   var n = 100000;
   if (requested_n) { n = parseInt(requested_n)}
   
-  var primesdata = calcPrimes(n);
-  res.render('index.html', { 
+var pagecount = "";
+var options = {
+  host: 'http://nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io/',
+  port: 80,
+  path: '/pagecount'
+};
+
+http.get(options, function(resp){
+  resp.on('data', function(chunk){
+    pagecount = chunk;
+    console.log("Page count: " + pagecount);
+    res.render('index.html', { 
                 pname : platformname, 
                 interfaces: networkInterfaces, 
                 totalPrimes: primesdata.countPrimes, 
                 totalTime: primesdata.totalTime,
                 luckyPrime: primesdata.luckyPrime,
+                pageCount: pagecount,
+                n: n });
+  });
+}).on("error", function(e){
+  console.log("Got error: " + e.message);
+  pagecount = -1;
+});
+
+
+  var primesdata = calcPrimes(n);
+  /*res.render('index.html', { 
+                pname : platformname, 
+                interfaces: networkInterfaces, 
+                totalPrimes: primesdata.countPrimes, 
+                totalTime: primesdata.totalTime,
+                luckyPrime: primesdata.luckyPrime,
+                pageCount: pagecount,
                 n: n })
+                */
 });
 
 app.get('/pagecount', function (req, res) {
