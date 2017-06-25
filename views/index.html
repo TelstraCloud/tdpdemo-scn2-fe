@@ -10,36 +10,23 @@
     html, body {
       margin: 0 0;
       padding: 0 0;
-      
-     
     }
     </style>
   </head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/1.0.1/trianglify.min.js"></script>
   <body>
   	<div id="mybox">
 			<!--<ul><li>Platform: <%=pname%></li>
 			<li>Network: <%=interfaces.eth0[0].address%></li></ul>-->
 		</div>
-  	<div id="mybox2" style="height: 400px;">
-  		<h1>Details</h1>
-		
-		
-		<h2>Find primes up to <%=n%></h2>
-		<h2>Time taken</h2>
-		<p id="timetaken"><%=totalTime%> ms</p>
-		<h2>How many primes:</h2>
-		<p id="primecount"><%=totalPrimes%></p>
-		<!--<h2>Prime numbers</h2>
-		<p id="primes"></p>-->
-		
-	</div>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/1.0.1/trianglify.min.js"></script>
+ 
   <script>
   // set up the base pattern
+  //TODO: change colours depending on zone
   var pattern = Trianglify({
     height: window.innerHeight,
     width: window.innerWidth,
-    x_colors: 'Blues',
+    x_colors: 'Blues',							// change colours here
     cell_size: 30 + Math.random() * 100})
   	// canvas
   	var x = document.getElementById("mybox");
@@ -68,7 +55,7 @@
 	//load info
 	var luckyprime = "Lucky prime: <%-luckyPrime%>";
 	 
-	ctx.fillText(luckyprime, mycanvas.width/2, mycanvas.height/2-180); 
+	ctx.fillText(luckyprime, mycanvas.width/2, mycanvas.height/2-140); 
 
 	ctx.fillText("AZ1", mycanvas.width/2, mycanvas.height/2); 
 
@@ -81,25 +68,6 @@
 	//load info
 	var loadinfo = "Found <%-totalPrimes%> primes in <%-totalTime%>ms";
 	ctx.fillText(loadinfo, 10, mycanvas.height-25); 
-
-
-
-	/*
-	<h2>Find primes up to <%=n%></h2>
-		<h2>Time taken</h2>
-		<p id="timetaken"><%=totalTime%> ms</p>
-		<h2>How many primes:</h2>
-		<p id="primecount"><%=totalPrimes%></p>
-	*/
-
-	//var y = document.getElementById("mybox2");
-	// 	y.style.backgroundImage="url("+pattern.png()+")" ;
-  //document.body.appendChild(pattern.svg())
-  // png
-  //var png = document.createElement('img')
-  //png.src = pattern.png()
-  //document.body.appendChild(png)
-
 
   </script>
   </body>
