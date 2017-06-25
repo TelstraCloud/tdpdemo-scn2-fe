@@ -123,7 +123,7 @@ var getK8SInfo = function() {
 
 app.get('/', function (req, res) {
   var requested_n = req.query.num;
-  var n = 1000;
+  var n = 100000;
   if (requested_n) { n = parseInt(requested_n)}
   
   var primesdata = calcPrimes(n);
