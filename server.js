@@ -131,7 +131,7 @@ var pagecount = {};
 http.get('http://nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io/pagecount', function(resp){
   resp.on('data', function(chunk){
     pagecount = chunk;
-    console.log("Page count: " + pagecount);
+    console.log("Page count: " + pagecount.pageCount);
     var primesdata = calcPrimes(n);
     res.render('index.html', { 
                 pname : platformname, 
@@ -139,7 +139,7 @@ http.get('http://nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io/pageco
                 totalPrimes: primesdata.countPrimes, 
                 totalTime: primesdata.totalTime,
                 luckyPrime: primesdata.luckyPrime,
-                pageCount: pagecount.pageCount,
+                pageCount: pagecount,
                 n: n });
   });
 }).on("error", function(e){
