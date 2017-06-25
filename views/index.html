@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Demo Info</title>
+    <style>
+    html, body {
+      margin: 0 0;
+      padding: 0 0;
+      
+     
+    }
+    </style>
+  </head>
+  <body>
+  	<div id="mybox">
+			<!--<ul><li>Platform: <%=pname%></li>
+			<li>Network: <%=interfaces.eth0[0].address%></li></ul>-->
+		</div>
+  	<div id="mybox2" style="height: 400px;">
+  		<h1>Details</h1>
+		
+		
+		<h2>Find primes up to <%=n%></h2>
+		<h2>Time taken</h2>
+		<p id="timetaken"><%=totalTime%> ms</p>
+		<h2>How many primes:</h2>
+		<p id="primecount"><%=totalPrimes%></p>
+		<!--<h2>Prime numbers</h2>
+		<p id="primes"></p>-->
+		
+	</div>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/1.0.1/trianglify.min.js"></script>
+  <script>
+  // set up the base pattern
+  var pattern = Trianglify({
+    height: window.innerHeight,
+    width: window.innerWidth,
+    x_colors: 'Blues',
+    cell_size: 30 + Math.random() * 100})
+  	// canvas
+  	var x = document.getElementById("mybox");
+  	var mycanvas = x.appendChild(pattern.canvas());
+  
+	var ctx = mycanvas.getContext("2d");
+
+	ctx.strokeStyle="#CCCCCC";
+	var radius = 100;
+	ctx.beginPath();
+	ctx.lineWidth=3;
+	ctx.arc(mycanvas.width/2, mycanvas.height/2, radius, 0 , 2*Math.PI);
+	ctx.stroke();
+	radius = 92;
+	ctx.beginPath();
+	ctx.lineWidth=3;
+	ctx.arc(mycanvas.width/2, mycanvas.height/2, radius, 0 , 2*Math.PI);
+	ctx.stroke();
+	
+
+	ctx.font = "50px Arial";
+	ctx.fillStyle = "white";
+	ctx.textAlign = "center";
+	ctx.textBaseline="middle"; 
+
+	//load info
+	var luckyprime = "Lucky prime: <%-luckyPrime%>";
+	 
+	ctx.fillText(luckyprime, mycanvas.width/2, mycanvas.height/2-180); 
+
+	ctx.fillText("AZ1", mycanvas.width/2, mycanvas.height/2); 
+
+	//put in the IP address
+	ctx.font = "18px Arial";
+	ctx.fillStyle = "white";
+	ctx.textAlign = "left";
+	ctx.fillText("IP: <%-interfaces.eth0[0].address%>", 10, mycanvas.height-55); 
+			
+	//load info
+	var loadinfo = "Found <%-totalPrimes%> primes in <%-totalTime%>ms";
+	ctx.fillText(loadinfo, 10, mycanvas.height-25); 
+
+
+
+	/*
+	<h2>Find primes up to <%=n%></h2>
+		<h2>Time taken</h2>
+		<p id="timetaken"><%=totalTime%> ms</p>
+		<h2>How many primes:</h2>
+		<p id="primecount"><%=totalPrimes%></p>
+	*/
+
+	//var y = document.getElementById("mybox2");
+	// 	y.style.backgroundImage="url("+pattern.png()+")" ;
+  //document.body.appendChild(pattern.svg())
+  // png
+  //var png = document.createElement('img')
+  //png.src = pattern.png()
+  //document.body.appendChild(png)
+
+
+  </script>
+  </body>
+</html>
