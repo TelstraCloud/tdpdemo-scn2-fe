@@ -123,7 +123,7 @@ var getK8SInfo = function() {
 
 app.get('/', function (req, res) {
   var requested_n = req.query.num;
-  var n = 100000;
+  var n = 1000;
   if (requested_n) { n = parseInt(requested_n)}
   
 var pagecount = "";
@@ -133,10 +133,11 @@ var options = {
   path: '/pagecount'
 };
 
-http.get(options, function(resp){
+http.get('http://nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io/pagecount', function(resp){
   resp.on('data', function(chunk){
     pagecount = chunk;
     console.log("Page count: " + pagecount);
+    var primesdata = calcPrimes(n);
     res.render('index.html', { 
                 pname : platformname, 
                 interfaces: networkInterfaces, 
@@ -150,9 +151,7 @@ http.get(options, function(resp){
   console.log("Got error: " + e.message);
   pagecount = -1;
 });
-
-
-  var primesdata = calcPrimes(n);
+  //var primesdata = calcPrimes(n);
   /*res.render('index.html', { 
                 pname : platformname, 
                 interfaces: networkInterfaces, 
