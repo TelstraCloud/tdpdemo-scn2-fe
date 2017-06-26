@@ -32,7 +32,7 @@ if (!process.env.KUBERNETES_SERVICE_HOST || !process.env.KUBERNETES_SERVICE_PORT
 }
 //  k8sHost = '54.153.181.249.nip.io';
 //  k8sPort = '8443';
-console.log(`Will connect to cluster using https://${k8sHost}:${k8sPort}`);
+console.log(`Will connect to kubernetes cluster using https://${k8sHost}:${k8sPort}`);
 
 // read the token from the service account
 var token = "";
@@ -126,37 +126,37 @@ app.get('/', function (req, res) {
   var n = 1000000;
   if (requested_n) { n = parseInt(requested_n)}
   
-var pagecount = {};
+  var pagecount = {};
 
-// TODO: replace pagecount with array of primes
-var beHost = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST;
-var bePort = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT;
-if (!process.env.NODEJS_MONGO_EXAMPLEDB_SERVICE_HOST || !process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT) {
-  beHost = 'nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io';
-  bePort = 80;
-  console.log('env NODEJS_MONGODB_EXAMPLE_SERVICE_HOST or NODEJS_MONGODB_EXAMPLE_SERVICE_PORT not set');
-  
-}
-console.log(`Will connect to BACK END using http://${beHost}:${bePort}`);
+  // TODO: replace pagecount with array of primes
+  var beHost = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST;
+  var bePort = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT;
+  console.log(`Attempting connection to BACK END using http://${beHost}:${bePort}`);
+  if (!process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST || !process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT) {
+    beHost = 'nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io';
+    bePort = 80;
+    console.log('env NODEJS_MONGODB_EXAMPLE_SERVICE_HOST or NODEJS_MONGODB_EXAMPLE_SERVICE_PORT not set');
+  }
+  console.log(`Will connect to BACK END using http://${beHost}:${bePort}`);
 
-http.get(`http://${beHost}:${bePort}/pagecount`, function(resp){
-  resp.on('data', function(chunk){
-    pagecount = JSON.parse(chunk).pageCount; //should ideally have a try block around this
-    console.log("Page count: " + pagecount);
-    var primesdata = calcPrimes(n);
-    res.render('index.html', { 
-                pname : platformname, 
-                interfaces: networkInterfaces, 
-                totalPrimes: primesdata.countPrimes, 
-                totalTime: primesdata.totalTime,
-                luckyPrime: primesdata.luckyPrime,
-                pageCount: pagecount,
-                n: n });
+  http.get(`http://${beHost}:${bePort}/pagecount`, function(resp){
+    resp.on('data', function(chunk){
+      pagecount = JSON.parse(chunk).pageCount; //should ideally have a try block around this
+      console.log("Page count: " + pagecount);
+      var primesdata = calcPrimes(n);
+      res.render('index.html', { 
+                  pname : platformname, 
+                  interfaces: networkInterfaces, 
+                  totalPrimes: primesdata.countPrimes, 
+                  totalTime: primesdata.totalTime,
+                  luckyPrime: primesdata.luckyPrime,
+                  pageCount: pagecount,
+                  n: n });
+    });
+  }).on("error", function(e){
+    console.log("Got error: " + e.message);
+    pagecount = -1;
   });
-}).on("error", function(e){
-  console.log("Got error: " + e.message);
-  pagecount = -1;
-});
   //var primesdata = calcPrimes(n);
   /*res.render('index.html', { 
                 pname : platformname, 
