@@ -129,7 +129,9 @@ app.get('/', function (req, res) {
 var pagecount = {};
 
 // TODO: replace pagecount with array of primes
-http.get('http://nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io/pagecount', function(resp){
+var beHost = process.env.NODEJS_MONGO_EXAMPLE_SERVICE_HOST;
+var bePort = process.env.NODEJS_MONGO_EXAMPLE_SERVICE_PORT;
+http.get(`https://${beHost}:${bePort}/pagecount`, function(resp){
   resp.on('data', function(chunk){
     pagecount = JSON.parse(chunk).pageCount; //should ideally have a try block around this
     console.log("Page count: " + pagecount);
