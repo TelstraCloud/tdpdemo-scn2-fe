@@ -131,7 +131,7 @@ var pagecount = {};
 // TODO: replace pagecount with array of primes
 var beHost = process.env.NODEJS_MONGO_EXAMPLE_SERVICE_HOST;
 var bePort = process.env.NODEJS_MONGO_EXAMPLE_SERVICE_PORT;
-http.get(`https://${beHost}:${bePort}/pagecount`, function(resp){
+http.get(`http://${beHost}:${bePort}/pagecount`, function(resp){
   resp.on('data', function(chunk){
     pagecount = JSON.parse(chunk).pageCount; //should ideally have a try block around this
     console.log("Page count: " + pagecount);
