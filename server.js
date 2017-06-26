@@ -129,15 +129,15 @@ app.get('/', function (req, res) {
 var pagecount = {};
 
 // TODO: replace pagecount with array of primes
-var beHost = process.env.NODEJS_MONGO_EXAMPLE_SERVICE_HOST;
-var bePort = process.env.NODEJS_MONGO_EXAMPLE_SERVICE_PORT;
-if (!process.env.NODEJS_MONGO_EXAMPLE_SERVICE_HOST || !process.env.NODEJS_MONGO_EXAMPLE_SERVICE_PORT) {
+var beHost = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST;
+var bePort = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT;
+if (!process.env.NODEJS_MONGO_EXAMPLEDB_SERVICE_HOST || !process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT) {
   beHost = 'nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io';
   bePort = 80;
-  console.log('env KUBERNETES_SERVICE_HOST or KUBERNETES_SERVICE_PORT not set');
+  console.log('env NODEJS_MONGODB_EXAMPLE_SERVICE_HOST or NODEJS_MONGODB_EXAMPLE_SERVICE_PORT not set');
   
 }
-console.log(`Will connect to BACK END using https://${beHost}:${bePort}`);
+console.log(`Will connect to BACK END using http://${beHost}:${bePort}`);
 
 http.get(`http://${beHost}:${bePort}/pagecount`, function(resp){
   resp.on('data', function(chunk){
