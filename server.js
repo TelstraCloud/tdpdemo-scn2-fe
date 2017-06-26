@@ -131,6 +131,14 @@ var pagecount = {};
 // TODO: replace pagecount with array of primes
 var beHost = process.env.NODEJS_MONGO_EXAMPLE_SERVICE_HOST;
 var bePort = process.env.NODEJS_MONGO_EXAMPLE_SERVICE_PORT;
+if (!process.env.NODEJS_MONGO_EXAMPLE_SERVICE_HOST || !process.env.NODEJS_MONGO_EXAMPLE_SERVICE_PORT) {
+  beHost = 'nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io';
+  bePort = 80;
+  console.log('env KUBERNETES_SERVICE_HOST or KUBERNETES_SERVICE_PORT not set');
+  
+}
+console.log(`Will connect to BACK END using https://${beHost}:${bePort}`);
+
 http.get(`http://${beHost}:${bePort}/pagecount`, function(resp){
   resp.on('data', function(chunk){
     pagecount = JSON.parse(chunk).pageCount; //should ideally have a try block around this
