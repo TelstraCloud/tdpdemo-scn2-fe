@@ -186,6 +186,7 @@ app.get('/pagecount', function (req, res) {
 app.get('/kubes', function (req, res) {
     var a = getK8SInfo();
     console.log(`kubes info: ${a}`)
+    res.setHeader('Content-Type', 'application/json');
     res.send(a);
 })
 
