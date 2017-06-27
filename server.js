@@ -184,7 +184,9 @@ app.get('/pagecount', function (req, res) {
 });
 
 app.get('/kubes', function (req, res) {
-    res.send(getK8SInfo);
+    var a = getK8SInfo();
+    console.log(`kubes info: ${a}`)
+    res.send(a);
 })
 
 // error handling
