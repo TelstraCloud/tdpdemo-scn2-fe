@@ -1,0 +1,56 @@
+<html>
+<head>
+<title>rotating arc</title>
+<style type="text/css">
+	#canvas {
+		width: 400px;
+		height: 400px;
+		background: black;
+	}
+</style>
+</head>
+<body>
+	<div style="height:400px">
+		<canvas id="canvas"></canvas>
+	</div>
+</body>
+<script type="text/javascript">
+	var canvas = document.getElementById("canvas");
+	var ctx = canvas.getContext("2d");
+	var radius = canvas.height/2;
+	var centre = {x: canvas.width/2, y: canvas.height/2};
+	radius = radius * 0.90;
+	drawClock();
+	var i = 1;
+	var it = 1;
+	var arcradius = radius-15;
+
+	setInterval(moveArc,500);
+	
+
+	function moveArc() {
+		it = i%8;
+		drawArc(it-1,8, arcradius,"white");
+	  	drawArc(it,8, arcradius,"#3333CC");
+	  	i++;
+	}
+
+	function drawClock() {
+		ctx.beginPath();
+	    ctx.arc(centre.x, centre.y, radius, 0 , 2*Math.PI);
+	    ctx.fillStyle = "white";
+	    ctx.fill();
+	}
+
+	function drawArc(segment, n, r,c) {
+		ctx.strokeStyle=c;
+		ctx.beginPath();
+		ctx.lineWidth=3;
+		ctx.arc(centre.x, centre.y, r, segment*2*Math.PI/n , (segment+1)*2*Math.PI/n);
+		ctx.stroke();
+	}
+
+
+</script>
+
+</html>

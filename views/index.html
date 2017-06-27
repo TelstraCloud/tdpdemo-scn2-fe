@@ -45,6 +45,14 @@
 	ctx.lineWidth=3;
 	ctx.arc(mycanvas.width/2, mycanvas.height/2, radius, 0 , 2*Math.PI);
 	ctx.stroke();
+
+	//animate the arc
+	var i = 1;
+	var it = 1;
+	var arcradius1 = 100;
+	var arcradius2 = 92;
+	var centre = {x: mycanvas.width/2, y: mycanvas.height/2};
+	setInterval(moveArc,500);
 	
 
 	ctx.font = "50px Arial";
@@ -72,6 +80,27 @@
 	//pagecount info
 	var pagecountinfo = "<%-pageCount%>";
 	ctx.fillText(pagecountinfo, mycanvas.width-180, 10); 
+
+	
+
+	function moveArc() {
+		it = i%8;
+		drawArc(it-1,8, arcradius1, "#cccccc");
+		drawArc(it-1,8, arcradius2, "#cccccc");
+	  	drawArc(it,8, arcradius1, "white");
+	  	drawArc(it,8, arcradius2, "white");
+	  	i++;
+	}
+
+	function drawArc(segment, n, r,c) {
+		ctx.strokeStyle=c;
+		ctx.fillStyle=c;
+		ctx.beginPath();
+		ctx.lineWidth=3;
+		ctx.arc(centre.x, centre.y, r, segment*2*Math.PI/n , (segment+1)*2*Math.PI/n);
+		ctx.stroke();
+		
+	}
 
   </script>
   </body>

@@ -33,16 +33,25 @@ if (!process.env.KUBERNETES_SERVICE_HOST || !process.env.KUBERNETES_SERVICE_PORT
 //  k8sHost = '54.153.181.249.nip.io';
 //  k8sPort = '8443';
 console.log(`Will connect to kubernetes cluster using https://${k8sHost}:${k8sPort}`);
-
 // read the token from the service account
 var token = "";
-if (fs.existsSync('/var/run/secrets/kubernetes.io/serviceaccount/token')) {
-   token = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token', 'utf8');
+if (process.env.MYTOKEN) {
+  token = process.env.MYTOKEN;
+  console.log('Kubes: Using MYTOKEN');
+} else  {
+  if (fs.existsSync('/var/run/secrets/kubernetes.io/serviceaccount/token')) {
+     token = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token', 'utf8');
+     console.log('Kubes: Using serviceaccount/token');
+  } else {
+      console.log('ERROR: Kubes no token')
+  }
 }
 var namespace = "";
 if (fs.existsSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace')) {
    namespace = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace', 'utf8');
 }
+
+
 
 //console.log("token: " + token);
 // this is to get network and OS info
@@ -72,10 +81,10 @@ var calcPrimes = function(n) {
 
   var countprimes = 0;
 
-    for (k = 2; k <= n; k++) {
-      if (A[k] === true) {
-        countprimes++;
-      }
+  for (k = 2; k <= n; k++) {
+    if (A[k] === true) {
+      countprimes++;
+    }
   } 
 
   // get a prime from somewhere between 2 and 3/4 of the way through the list
@@ -136,7 +145,7 @@ app.get('/', function (req, res) {
     beHost = 'nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io';
     bePort = 80;
     console.log('env NODEJS_MONGODB_EXAMPLE_SERVICE_HOST or NODEJS_MONGODB_EXAMPLE_SERVICE_PORT not set');
-  }
+  };
   console.log(`Will connect to BACK END using http://${beHost}:${bePort}`);
 
   http.get(`http://${beHost}:${bePort}/pagecount`, function(resp){
@@ -173,6 +182,10 @@ app.get('/pagecount', function (req, res) {
   
     res.send('{"pageCount": -1 }');
 });
+
+app.get('/kubes', function (req, res) {
+    res.send(getK8SInfo);
+})
 
 // error handling
 app.use(function(err, req, res, next){
