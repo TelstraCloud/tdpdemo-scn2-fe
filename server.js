@@ -50,7 +50,17 @@ var namespace = "";
 if (fs.existsSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace')) {
    namespace = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace', 'utf8');
 }
+// connect to the API server
 
+  const core = new Api.Core({
+    url: `https://${k8sHost}:${k8sPort}`,
+    auth: {
+      bearer: token,
+    },
+    insecureSkipTlsVerify: true,
+    version: 'v1',
+    namespace: namespace
+  });
 
 
 //console.log("token: " + token);
@@ -103,18 +113,12 @@ var calcPrimes = function(n) {
   return { countPrimes:countprimes,totalTime:totalt,luckyPrime: lucky_prime};
 }
 
-var getK8SInfo = function() {
-// connect to the API server
+function print(err, result) {
+  console.log(JSON.stringify(err || result, null, 4));
+}
 
-  const core = new Api.Core({
-    url: `https://${k8sHost}:${k8sPort}`,
-    auth: {
-      bearer: token,
-    },
-    insecureSkipTlsVerify: true,
-    version: 'v1',
-    namespace: namespace
-  });
+var getK8SInfo = function() {
+
   //console.log('connecting to k8s api at ' + core.url);
 
   //const core = new Api.Core(Api.config.getInCluster());
