@@ -124,10 +124,12 @@ var getK8SInfo = function() {
   core.namespaces.pods.get(function (err, result) {
     if (err) {
       console.log("error getting pods: " + err)
+      return err;
     }
     console.log("pods: " + JSON.stringify(err || result, null, 2));
+    return result;
   });
-  return core; //JSON.stringify(core);
+  //return core; //JSON.stringify(core);
 };
 
 app.get('/', function (req, res) {
