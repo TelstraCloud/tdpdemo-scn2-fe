@@ -127,7 +127,7 @@ var getK8SInfo = function() {
     }
     console.log("pods: " + JSON.stringify(err || result, null, 2));
   });
-  return JSON.stringify(core);
+  return core; //JSON.stringify(core);
 };
 
 app.get('/', function (req, res) {
@@ -184,7 +184,7 @@ app.get('/pagecount', function (req, res) {
 });
 
 app.get('/kubes', function (req, res) {
-    var a = getK8SInfo();
+    var a = JSON.stringify(getK8SInfo(),null,4);
     console.log(`kubes info: ${a}`)
     res.setHeader('Content-Type', 'application/json');
     res.send(a);
