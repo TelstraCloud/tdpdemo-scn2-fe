@@ -30,8 +30,9 @@ if (!process.env.KUBERNETES_SERVICE_HOST || !process.env.KUBERNETES_SERVICE_PORT
   console.log('env KUBERNETES_SERVICE_HOST or KUBERNETES_SERVICE_PORT not set');
   //console.log(`using https://${k8sHost}:${k8sPort}`);
 }
-//  k8sHost = '54.153.181.249.nip.io';
-//  k8sPort = '8443';
+// preload kubes info
+var k = getK8SInfo();
+
 console.log(`Will connect to kubernetes cluster using https://${k8sHost}:${k8sPort}`);
 // read the token from the service account
 var token = "";
@@ -130,7 +131,7 @@ var getK8SInfo = function() {
       console.log("error getting pods: " + err)
       return err;
     }
-    console.log("pods: " + JSON.stringify(err || result, null, 2));
+    //console.log("pods: " + JSON.stringify(err || result, null, 2));
     return result;
   });
   //return core; //JSON.stringify(core);
@@ -190,7 +191,7 @@ app.get('/pagecount', function (req, res) {
 });
 
 app.get('/kubes', function (req, res) {
-    var k = getK8SInfo();
+    //var k = getK8SInfo();
 
     var k0 = k.pods.items[0].metadata.name;
     console.log(k0)
