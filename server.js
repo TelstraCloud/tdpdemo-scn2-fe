@@ -4,6 +4,7 @@ var express = require('express'),
     app     = express(),
     eps     = require('ejs'),
     morgan  = require('morgan'),
+    request = require('request'),
     http = require('http');
     
 Object.assign=require('object-assign');
@@ -16,12 +17,79 @@ var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
 
 var environment = process.env;   
 
+const nodeMap = {
+  "ip-172-31-32-19.ap-southeast-2.compute.internal" : "DC1",
+  "ip-172-31-33-133.ap-southeast-2.compute.internal": "AZ1",
+  "ip-172-31-38-70.ap-southeast-2.compute.internal" : "AZ2",
+  "ip-172-31-42-224.ap-southeast-2.compute.internal": "DC2"
+}
+
+function getMyDetails() {
+  var project_namespace = process.env.OPENSHIFT_BUILD_NAMESPACE;
+  var hostname = process.env.HOSTNAME;
+
+  if (hostname && project_namespace) {
+    var url = `http://tdp-api-tdp.54.153.181.249.nip.io/project/${project_namespace}/pods`;
+
+    var project_info;
+
+    request(url, function(err,res,body){
+      if (!error && response.statusCode === 200) {
+            project_info = body;
+      } else {
+        console.log("error retreiving TDP-API info: " + err);
+        return defaultDetails();
+      }
+    });
+
+  };
+
+  if (! (hostname && project_namespace && project_info)) {
+    // then something went wrong so we need to make up data
+    return defaultDetails();
+  };
+
+  var project = JSON.parse(project_info);
+  var pod;
+
+  for (i=0; i<project.pods.length; i++){
+    if (project.pods[i].metadata.name === hostname) {
+      pod = project.pods[i];
+      break;
+    }
+  };
+  if (!pod) { return defaultDetails();};
+
+  var node = pod.spec.nodeName;
+
+  return {
+    zone: nodeMap[node],
+    node: node,
+    hostname: hostname,
+    project: project_namespace
+  };
+
+}; //end getMyDetails()
+
+function defaultDetails() {
+  // this is what we send back if there's no pod info or we can't connect to the API or can't find env vars
+  return {
+    zone: "UNK",
+    node: "unknown node",
+    hostname: "unknown host",
+    project: "unknown project"
+  };
+}
+
+
+var myDetails = getMyDetails();
 // this is to get the k8s info
-const Api = require('kubernetes-client');
-const JSONStream = require('json-stream');
-const jsonStream = new JSONStream(); 
+//const Api = require('kubernetes-client');
+//const JSONStream = require('json-stream');
+//const jsonStream = new JSONStream(); 
 
 // determine the cluster host and port
+/*
 var k8sHost = process.env.KUBERNETES_SERVICE_HOST;
 var k8sPort = process.env.KUBERNETES_SERVICE_PORT;
 if (!process.env.KUBERNETES_SERVICE_HOST || !process.env.KUBERNETES_SERVICE_PORT) {
@@ -30,8 +98,8 @@ if (!process.env.KUBERNETES_SERVICE_HOST || !process.env.KUBERNETES_SERVICE_PORT
   console.log('env KUBERNETES_SERVICE_HOST or KUBERNETES_SERVICE_PORT not set');
   //console.log(`using https://${k8sHost}:${k8sPort}`);
 }
-
-
+*/
+/*
 console.log(`Will connect to kubernetes cluster using https://${k8sHost}:${k8sPort}`);
 // read the token from the service account
 var token = "";
@@ -64,12 +132,13 @@ if (fs.existsSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace')) {
 // preload kubes info
 var k = getK8SInfo();
 console.log("k-pods: " + JSON.stringify(k, null, 2));
-
+*/
 //console.log("token: " + token);
 // this is to get network and OS info
 var os = require( 'os' );
 var networkInterfaces = os.networkInterfaces( ); //this is an object
 var platformname = os.platform(); // this is a string
+
 
 
 var calcPrimes = function(n) {
@@ -119,6 +188,7 @@ function print(err, result) {
   console.log(JSON.stringify(err || result, null, 4));
 }
 
+/*
 function getK8SInfo() {
 
   //console.log('connecting to k8s api at ' + core.url);
@@ -132,13 +202,14 @@ function getK8SInfo() {
       console.log("error getting pods: " + err)
       return err;
     }
-    console.log("pods: " + JSON.stringify(/*rr || */result, null, 2));
+    console.log("pods: " + JSON.stringify(err || result, null, 2));
     
     return result;
 
   });
   //return core; //JSON.stringify(core);
 };
+*/
 
 app.get('/', function (req, res) {
   var requested_n = req.query.num;
@@ -189,6 +260,7 @@ app.get('/', function (req, res) {
                 totalTime: primesdata.totalTime,
                 luckyPrime: primesdata.luckyPrime,
                 pageCount: 0,
+                details: myDetails,
                 n: n })
                 
 });
@@ -202,11 +274,11 @@ app.get('/kubes', function (req, res) {
     //var k = getK8SInfo();
 
     //var k0 = k.pods.items[0].metadata.name;
-    console.log("k=" + k)
+    //console.log("k=" + k)
     //var a = JSON.stringify(getK8SInfo(),null,4);
     //console.log(`kubes info: ${a}`)
     //res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(k,null,4));
+    res.send(JSON.stringify(myDetails,null,4));
 })
 
 // error handling
