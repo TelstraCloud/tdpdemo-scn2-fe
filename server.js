@@ -29,7 +29,7 @@ function getMyDetails() {
   var hostname = process.env.HOSTNAME;
 
   if (hostname && project_namespace) {
-    var url = `http://tdp-api-tdp.54.153.181.249.nip.io/project/${project_namespace}/pods`;
+    var url = `http://tdp-api-tdp.54.153.181.249.nip.io/projects/${project_namespace}/pods`;
     console.log("getting TDP API at: " + url);
     var project_info;
 
