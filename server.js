@@ -92,57 +92,8 @@ function defaultDetails() {
 
 
 var myDetails = getMyDetails();
-// this is to get the k8s info
-//const Api = require('kubernetes-client');
-//const JSONStream = require('json-stream');
-//const jsonStream = new JSONStream(); 
+console.log("myDetails:\n " + JSON.stringify(myDetails,null,4));
 
-// determine the cluster host and port
-/*
-var k8sHost = process.env.KUBERNETES_SERVICE_HOST;
-var k8sPort = process.env.KUBERNETES_SERVICE_PORT;
-if (!process.env.KUBERNETES_SERVICE_HOST || !process.env.KUBERNETES_SERVICE_PORT) {
-  k8sHost = '54.153.181.249.nip.io';
-  k8sPort = '8443';
-  console.log('env KUBERNETES_SERVICE_HOST or KUBERNETES_SERVICE_PORT not set');
-  //console.log(`using https://${k8sHost}:${k8sPort}`);
-}
-*/
-/*
-console.log(`Will connect to kubernetes cluster using https://${k8sHost}:${k8sPort}`);
-// read the token from the service account
-var token = "";
-if (process.env.MYTOKEN) {
-  token = process.env.MYTOKEN;
-  console.log('Kubes: Using MYTOKEN');
-} else  {
-  if (fs.existsSync('/var/run/secrets/kubernetes.io/serviceaccount/token')) {
-     token = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token', 'utf8');
-     console.log('Kubes: Using serviceaccount/token');
-  } else {
-      console.log('ERROR: Kubes no token')
-  }
-}
-var namespace = "";
-if (fs.existsSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace')) {
-   namespace = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace', 'utf8');
-}
-// connect to the API server
-
-  var core = new Api.Core({
-    url: `https://${k8sHost}:${k8sPort}`,
-    auth: {
-      bearer: token,
-    },
-    insecureSkipTlsVerify: true,
-    version: 'v1',
-    namespace: namespace
-  });
-// preload kubes info
-var k = getK8SInfo();
-console.log("k-pods: " + JSON.stringify(k, null, 2));
-*/
-//console.log("token: " + token);
 // this is to get network and OS info
 var os = require( 'os' );
 var networkInterfaces = os.networkInterfaces( ); //this is an object
@@ -197,28 +148,7 @@ function print(err, result) {
   console.log(JSON.stringify(err || result, null, 4));
 }
 
-/*
-function getK8SInfo() {
 
-  //console.log('connecting to k8s api at ' + core.url);
-
-  //const core = new Api.Core(Api.config.getInCluster());
-  //console.log('core: ' + JSON.stringify(core))
-
-
-  core.namespaces.pods.get(function (err, result) {
-    if (err) {
-      console.log("error getting pods: " + err)
-      return err;
-    }
-    console.log("pods: " + JSON.stringify(err || result, null, 2));
-    
-    return result;
-
-  });
-  //return core; //JSON.stringify(core);
-};
-*/
 
 app.get('/', function (req, res) {
   var requested_n = req.query.num;
@@ -280,13 +210,7 @@ app.get('/pagecount', function (req, res) {
 });
 
 app.get('/kubes', function (req, res) {
-    //var k = getK8SInfo();
-
-    //var k0 = k.pods.items[0].metadata.name;
-    //console.log("k=" + k)
-    //var a = JSON.stringify(getK8SInfo(),null,4);
-    //console.log(`kubes info: ${a}`)
-    //res.setHeader('Content-Type', 'application/json');
+    
     res.send(JSON.stringify(myDetails,null,4));
 })
 
