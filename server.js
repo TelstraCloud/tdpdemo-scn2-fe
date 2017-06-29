@@ -87,14 +87,16 @@ function getMyDetails() {
 
 function defaultDetails() {
   // this is what we send back if there's no pod info or we can't connect to the API or can't find env vars
-  return {
+  myDetails =  {
     zone: "UNK",
     node: "unknown node",
     hostname: "unknown host",
     project: "unknown project"
   };
+  return;
 }
 
+getMyDetails();
 
 
 console.log("myDetails:\n " + JSON.stringify(myDetails,null,4));
