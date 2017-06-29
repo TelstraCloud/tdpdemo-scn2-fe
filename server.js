@@ -194,11 +194,11 @@ app.get('/kubes', function (req, res) {
     //var k = getK8SInfo();
 
     //var k0 = k.pods.items[0].metadata.name;
-    console.log(k)
+    console.log("k=" + k)
     //var a = JSON.stringify(getK8SInfo(),null,4);
     //console.log(`kubes info: ${a}`)
     //res.setHeader('Content-Type', 'application/json');
-    res.send(k);
+    res.send(JSON.stringify(k,null,4);
 })
 
 // error handling
