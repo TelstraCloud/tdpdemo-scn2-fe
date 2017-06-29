@@ -147,7 +147,12 @@ app.get('/', function (req, res) {
   
   var pagecount = {};
 
-  // TODO: replace pagecount with array of primes
+  // TODO: need to catch error here
+
+  // TODO: replace pagecount with array of primes 
+
+
+/*
   var beHost = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST.toUpperCase().replace(/-/g,'_');
   var bePort = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT.toUpperCase().replace(/-/g,'_');
   console.log(`Attempting connection to BACK END using http://${beHost}:${bePort}`);
@@ -175,17 +180,17 @@ app.get('/', function (req, res) {
   }).on("error", function(e){
     console.log("Got error: " + e.message);
     pagecount = -1;
-  });
-  //var primesdata = calcPrimes(n);
-  /*res.render('index.html', { 
+  });*/
+  var primesdata = calcPrimes(n);
+  res.render('index.html', { 
                 pname : platformname, 
                 interfaces: networkInterfaces, 
                 totalPrimes: primesdata.countPrimes, 
                 totalTime: primesdata.totalTime,
                 luckyPrime: primesdata.luckyPrime,
-                pageCount: pagecount,
+                pageCount: 0,
                 n: n })
-                */
+                
 });
 
 app.get('/pagecount', function (req, res) {
