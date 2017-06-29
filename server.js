@@ -195,7 +195,11 @@ app.get('/', function (req, res) {
                 pageCount: 0,
                 lastprimes: lastprimes,
                 details: myDetails,
-                n: n })
+                n: n });
+        // now update the back end with the new prime
+        request({url: beURL+"/setprime?num="+primesdata.luckyPrime, json: true}, function (error, response, body) { 
+        //don't care about the response
+        });   
     })
   } else {
         var primesdata = calcPrimes(n);
