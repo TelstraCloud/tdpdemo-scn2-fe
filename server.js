@@ -26,6 +26,8 @@ const nodeMap = {
   "ip-172-31-42-224.ap-southeast-2.compute.internal": "DC2"
 };
 
+var myDetails; // = getMyDetails();
+
 function getMyDetails() {
   var project_namespace = process.env.OPENSHIFT_BUILD_NAMESPACE;
   var hostname = process.env.HOSTNAME;
@@ -61,8 +63,8 @@ function getMyDetails() {
             };
 
             console.log("output:\n" + JSON.stringify(output,null,4) );
-            test_output_global = output;
-            return output;
+            myDetails = output; //lets make it global
+            return;// output;
 
       } else {
         console.log("error retreiving TDP-API info: " + err);
@@ -94,7 +96,7 @@ function defaultDetails() {
 }
 
 
-var myDetails = getMyDetails();
+
 console.log("myDetails:\n " + JSON.stringify(myDetails,null,4));
 
 // this is to get network and OS info
@@ -216,7 +218,7 @@ app.get('/kubes', function (req, res) {
     
     console.log("/kubes, myDetails: " + JSON.stringify(myDetails,null,4));
     console.log("/kubes, test_output_global: " + JSON.stringify(test_output_global,null,4));
-    res.send(test_output_global);
+    res.send(myDetails);
 })
 
 // error handling
