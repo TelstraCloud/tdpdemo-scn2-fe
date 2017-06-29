@@ -181,14 +181,12 @@ app.get('/', function (req, res) {
     request({url: beURL+"/getprimes", json: true}, function (error, response, body) {
 
         if (!error && response.statusCode === 200) {
-            console.log(body) // Print the json response
+            console.log(body + " :" + typeof(body)); // Print the json response
             lastprimes = body;
         }
-    })
-  };
-  
-  var primesdata = calcPrimes(n);
-  res.render('index.html', { 
+
+        var primesdata = calcPrimes(n);
+        res.render('index.html', { 
                 pname : platformname, 
                 interfaces: networkInterfaces, 
                 totalPrimes: primesdata.countPrimes, 
@@ -198,6 +196,21 @@ app.get('/', function (req, res) {
                 lastprimes: lastprimes,
                 details: myDetails,
                 n: n })
+    })
+  } else {
+        var primesdata = calcPrimes(n);
+        res.render('index.html', { 
+                pname : platformname, 
+                interfaces: networkInterfaces, 
+                totalPrimes: primesdata.countPrimes, 
+                totalTime: primesdata.totalTime,
+                luckyPrime: primesdata.luckyPrime,
+                pageCount: 0,
+                lastprimes: "none",
+                details: myDetails,
+                n: n })
+
+  } ;
                 
 });
 
