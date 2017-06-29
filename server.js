@@ -30,14 +30,15 @@ function getMyDetails() {
 
   if (hostname && project_namespace) {
     var url = `http://tdp-api-tdp.54.153.181.249.nip.io/project/${project_namespace}/pods`;
-
+    console.log("getting TDP API at: " + url);
     var project_info;
 
     request(url, function(err,res,body){
-      if (!err && res.statusCode === 200) {
+      if (res.statusCode === 200) {
             project_info = body;
       } else {
         console.log("error retreiving TDP-API info: " + err);
+        console.log("response status code: " + res.statusCode)
         return defaultDetails();
       }
     });
@@ -46,6 +47,7 @@ function getMyDetails() {
 
   if (! (hostname && project_namespace && project_info)) {
     // then something went wrong so we need to make up data
+    console.log("something went wrong getting project_info OR ENV vars not set")
     return defaultDetails();
   };
 
