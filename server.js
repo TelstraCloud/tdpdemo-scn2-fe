@@ -36,6 +36,28 @@ function getMyDetails() {
     request(url, function(err,res,body){
       if (res.statusCode === 200) {
             project_info = body;
+            console.log("project_info: " + project_info);
+
+            var project = JSON.parse(project_info);
+            var pod;
+
+            for (i=0; i<project.pods.length; i++){
+              if (project.pods[i].metadata.name === hostname) {
+                pod = project.pods[i];
+                break;
+              }
+            };
+            if (!pod) { return defaultDetails();};
+
+            var node = pod.spec.nodeName;
+
+            return {
+              zone: nodeMap[node],
+              node: node,
+              hostname: hostname,
+              project: project_namespace
+            };
+
       } else {
         console.log("error retreiving TDP-API info: " + err);
         console.log("response status code: " + res.statusCode)
@@ -45,31 +67,13 @@ function getMyDetails() {
 
   };
 
-  if (! (hostname && project_namespace && project_info)) {
+  if (! (hostname && project_namespace /*&& project_info*/)) {
     // then something went wrong so we need to make up data
     console.log("something went wrong getting project_info OR ENV vars not set")
     return defaultDetails();
   };
 
-  var project = JSON.parse(project_info);
-  var pod;
-
-  for (i=0; i<project.pods.length; i++){
-    if (project.pods[i].metadata.name === hostname) {
-      pod = project.pods[i];
-      break;
-    }
-  };
-  if (!pod) { return defaultDetails();};
-
-  var node = pod.spec.nodeName;
-
-  return {
-    zone: nodeMap[node],
-    node: node,
-    hostname: hostname,
-    project: project_namespace
-  };
+  
 
 }; //end getMyDetails()
 
