@@ -118,7 +118,7 @@ function print(err, result) {
   console.log(JSON.stringify(err || result, null, 4));
 }
 
-var getK8SInfo = function() {
+function getK8SInfo() {
 
   //console.log('connecting to k8s api at ' + core.url);
 
@@ -145,8 +145,8 @@ app.get('/', function (req, res) {
   var pagecount = {};
 
   // TODO: replace pagecount with array of primes
-  var beHost = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST;
-  var bePort = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT;
+  var beHost = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST.toUpperCase().replace(/-/g,'_');
+  var bePort = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT.toUpperCase().replace(/-/g,'_');
   console.log(`Attempting connection to BACK END using http://${beHost}:${bePort}`);
   if (!process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST || !process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT) {
     beHost = 'nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io';
