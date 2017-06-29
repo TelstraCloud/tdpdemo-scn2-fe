@@ -193,12 +193,12 @@ app.get('/pagecount', function (req, res) {
 app.get('/kubes', function (req, res) {
     //var k = getK8SInfo();
 
-    var k0 = k.pods.items[0].metadata.name;
-    console.log(k0)
+    //var k0 = k.pods.items[0].metadata.name;
+    console.log(k)
     //var a = JSON.stringify(getK8SInfo(),null,4);
     //console.log(`kubes info: ${a}`)
     //res.setHeader('Content-Type', 'application/json');
-    res.send(k0);
+    res.send(k);
 })
 
 // error handling
