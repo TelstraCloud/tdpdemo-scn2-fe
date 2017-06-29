@@ -71,15 +71,15 @@
 	ctx.font = "18px Arial";
 	ctx.fillStyle = "white";
 	ctx.textAlign = "left";
-	ctx.fillText("Previous: <%-lastprimes[0]%>", 10, mycanvas.height-55); 
+	ctx.fillText("Previous: <%-lastprimes%>", 10, mycanvas.height-55); 
 			
 	//load info
 	var loadinfo = "Found <%-totalPrimes%> primes in <%-totalTime%>ms";
 	ctx.fillText(loadinfo, 10, mycanvas.height-25); 
 
 	//last primes info
-	var pagecountinfo = "<%-lastprimes%>";
-	ctx.fillText(pagecountinfo, mycanvas.width-250, mycanvas.height-25); 
+	//var pagecountinfo = "<%-lastprimes%>";
+	//ctx.fillText(pagecountinfo, mycanvas.width-250, mycanvas.height-25); 
 
 	
 
