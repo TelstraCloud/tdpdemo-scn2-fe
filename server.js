@@ -30,8 +30,7 @@ if (!process.env.KUBERNETES_SERVICE_HOST || !process.env.KUBERNETES_SERVICE_PORT
   console.log('env KUBERNETES_SERVICE_HOST or KUBERNETES_SERVICE_PORT not set');
   //console.log(`using https://${k8sHost}:${k8sPort}`);
 }
-// preload kubes info
-var k = getK8SInfo();
+
 
 console.log(`Will connect to kubernetes cluster using https://${k8sHost}:${k8sPort}`);
 // read the token from the service account
@@ -62,7 +61,8 @@ if (fs.existsSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace')) {
     version: 'v1',
     namespace: namespace
   });
-
+// preload kubes info
+var k = getK8SInfo();
 
 //console.log("token: " + token);
 // this is to get network and OS info
