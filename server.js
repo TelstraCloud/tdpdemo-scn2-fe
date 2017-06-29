@@ -198,7 +198,7 @@ app.get('/kubes', function (req, res) {
     //var a = JSON.stringify(getK8SInfo(),null,4);
     //console.log(`kubes info: ${a}`)
     //res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(k,null,4);
+    res.send(JSON.stringify(k,null,4));
 })
 
 // error handling
