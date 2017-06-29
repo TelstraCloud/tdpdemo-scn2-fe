@@ -110,15 +110,12 @@ var platformname = os.platform(); // this is a string
 
 var calcPrimes = function(n) {
   var t1 = Date.now();
-  //var n = 50000000;  //find primes up to n
   var upperbound = Math.floor(Math.sqrt(n)) + 1 ;
 
   var A = []; //this is all the numbers from 2..n
-
   for (k = 2; k <= n; k++) {
       A[k] = true;
   } 
-
   for (i = 2; i < upperbound; i++ ) {
     if (A[i] === true) {
       for (j = i*i; j <= n; j = j + i) {
@@ -126,15 +123,12 @@ var calcPrimes = function(n) {
       }
     }
   }
-
   var countprimes = 0;
-
   for (k = 2; k <= n; k++) {
     if (A[k] === true) {
       countprimes++;
     }
   } 
-
   // get a prime from somewhere between 2 and 3/4 of the way through the list
   var lucky_index = Math.floor((Math.random() * countprimes * .75) + 2);
   var lucky_prime = 2;
@@ -144,11 +138,29 @@ var calcPrimes = function(n) {
         break;
       }
   } 
-
-
   var totalt = Date.now() - t1;
 
   return { countPrimes:countprimes,totalTime:totalt,luckyPrime: lucky_prime};
+}
+
+function getBackEndURL() {
+  // bit of a kludge.  check for either NODEJS_MONGODB_EXAMPLE_ or for NJS_PRIMES_APP_
+  var beHost = "";
+  var bePort = "";
+  if (process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST && process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT) {
+    beHost = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST.toUpperCase().replace(/-/g,'_');
+    bePort = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT.toUpperCase().replace(/-/g,'_');
+  } 
+  else if (process.env.NJS_PRIMES_APP_SERVICE_HOST && process.env.NJS_PRIMES_APP_SERVICE_PORT) {
+    beHost = process.env.NJS_PRIMES_APP_SERVICE_HOST.toUpperCase().replace(/-/g,'_');
+    bePort = process.env.NJS_PRIMES_APP_SERVICE_PORT.toUpperCase().replace(/-/g,'_');
+  };
+  var beURL = "";
+  if (beHost != "") {
+    beURL =`http://${beHost}:${bePort}`;
+  }
+
+  return beURL;  
 }
 
 function print(err, result) {
@@ -163,41 +175,18 @@ app.get('/', function (req, res) {
   if (requested_n) { n = parseInt(requested_n)}
   
   var pagecount = {};
+  var lastprimes = [];
+  var beURL = getBackEndURL();
+  if (beURL != "") {
+    request({url: beURL+"/getprimes", json: true}, function (error, response, body) {
 
-  // TODO: need to catch error here
-
-  // TODO: replace pagecount with array of primes 
-
-
-/*
-  var beHost = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST.toUpperCase().replace(/-/g,'_');
-  var bePort = process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT.toUpperCase().replace(/-/g,'_');
-  console.log(`Attempting connection to BACK END using http://${beHost}:${bePort}`);
-  if (!process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_HOST || !process.env.NODEJS_MONGODB_EXAMPLE_SERVICE_PORT) {
-    beHost = 'nodejs-mongodb-example-marcin-proj.54.153.181.249.nip.io';
-    bePort = 80;
-    console.log('env NODEJS_MONGODB_EXAMPLE_SERVICE_HOST or NODEJS_MONGODB_EXAMPLE_SERVICE_PORT not set');
+        if (!error && response.statusCode === 200) {
+            console.log(body) // Print the json response
+            lastprimes = body;
+        }
+    })
   };
-  console.log(`Will connect to BACK END using http://${beHost}:${bePort}`);
-
-  http.get(`http://${beHost}:${bePort}/pagecount`, function(resp){
-    resp.on('data', function(chunk){
-      pagecount = JSON.parse(chunk).pageCount; //should ideally have a try block around this
-      console.log("Page count: " + pagecount);
-      var primesdata = calcPrimes(n);
-      res.render('index.html', { 
-                  pname : platformname, 
-                  interfaces: networkInterfaces, 
-                  totalPrimes: primesdata.countPrimes, 
-                  totalTime: primesdata.totalTime,
-                  luckyPrime: primesdata.luckyPrime,
-                  pageCount: pagecount,
-                  n: n });
-    });
-  }).on("error", function(e){
-    console.log("Got error: " + e.message);
-    pagecount = -1;
-  });*/
+  
   var primesdata = calcPrimes(n);
   res.render('index.html', { 
                 pname : platformname, 
@@ -206,6 +195,7 @@ app.get('/', function (req, res) {
                 totalTime: primesdata.totalTime,
                 luckyPrime: primesdata.luckyPrime,
                 pageCount: 0,
+                lastprimes: lastprimes,
                 details: myDetails,
                 n: n })
                 
@@ -219,7 +209,6 @@ app.get('/pagecount', function (req, res) {
 app.get('/kubes', function (req, res) {
     
     console.log("/kubes, myDetails: " + JSON.stringify(myDetails,null,4));
-    console.log("/kubes, test_output_global: " + JSON.stringify(test_output_global,null,4));
     res.send(myDetails);
 })
 

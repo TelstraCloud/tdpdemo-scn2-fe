@@ -22,6 +22,7 @@
   <script>
   // set up the base pattern
   //TODO: change colours depending on zone
+
   var pattern = Trianglify({
     height: window.innerHeight,
     width: window.innerWidth,
@@ -76,9 +77,9 @@
 	var loadinfo = "Found <%-totalPrimes%> primes in <%-totalTime%>ms";
 	ctx.fillText(loadinfo, 10, mycanvas.height-25); 
 
-	//pagecount info
-	var pagecountinfo = "<%-pageCount%>";
-	ctx.fillText(pagecountinfo, mycanvas.width-180, 10); 
+	//last primes info
+	var pagecountinfo = "<%-lastprimes%>";
+	ctx.fillText(pagecountinfo, mycanvas.width-250, mycanvas.height-25); 
 
 	
 
