@@ -211,7 +211,8 @@ app.get('/pagecount', function (req, res) {
 
 app.get('/kubes', function (req, res) {
     
-    res.send(JSON.stringify(myDetails,null,4));
+    //res.send(JSON.stringify(myDetails,null,4));
+    res.send(getMyDetails());
 })
 
 // error handling
