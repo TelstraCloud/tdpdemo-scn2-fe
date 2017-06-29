@@ -131,8 +131,10 @@ function getK8SInfo() {
       console.log("error getting pods: " + err)
       return err;
     }
-    //console.log("pods: " + JSON.stringify(err || result, null, 2));
+    console.log("pods: " + JSON.stringify(err || result, null, 2));
+    
     return result;
+
   });
   //return core; //JSON.stringify(core);
 };
