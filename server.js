@@ -63,6 +63,7 @@ if (fs.existsSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace')) {
   });
 // preload kubes info
 var k = getK8SInfo();
+console.log("k-pods: " + JSON.stringify(k, null, 2));
 
 //console.log("token: " + token);
 // this is to get network and OS info
@@ -131,7 +132,7 @@ function getK8SInfo() {
       console.log("error getting pods: " + err)
       return err;
     }
-    console.log("pods: " + JSON.stringify(err || result, null, 2));
+    //console.log("pods: " + JSON.stringify(err || result, null, 2));
     
     return result;
 
