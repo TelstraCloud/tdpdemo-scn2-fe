@@ -53,7 +53,7 @@ if (fs.existsSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace')) {
 }
 // connect to the API server
 
-  const core = new Api.Core({
+  var core = new Api.Core({
     url: `https://${k8sHost}:${k8sPort}`,
     auth: {
       bearer: token,
