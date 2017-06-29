@@ -22,7 +22,7 @@ const nodeMap = {
   "ip-172-31-33-133.ap-southeast-2.compute.internal": "AZ1",
   "ip-172-31-38-70.ap-southeast-2.compute.internal" : "AZ2",
   "ip-172-31-42-224.ap-southeast-2.compute.internal": "DC2"
-}
+};
 
 function getMyDetails() {
   var project_namespace = process.env.OPENSHIFT_BUILD_NAMESPACE;
@@ -36,7 +36,7 @@ function getMyDetails() {
     request(url, function(err,res,body){
       if (res.statusCode === 200) {
             project_info = body;
-            console.log("project_info: " + project_info);
+            //console.log("project_info: " + project_info);
 
             var project = JSON.parse(project_info);
             var pod;
@@ -51,12 +51,15 @@ function getMyDetails() {
 
             var node = pod.spec.nodeName;
 
-            return {
+            var output = {
               zone: nodeMap[node],
               node: node,
               hostname: hostname,
               project: project_namespace
             };
+
+            console.log("output:\n" + JSON.stringify(output,null,4) );
+            return output;
 
       } else {
         console.log("error retreiving TDP-API info: " + err);
