@@ -17,6 +17,8 @@ var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
 
 var environment = process.env;   
 
+var test_output_global;
+
 const nodeMap = {
   "ip-172-31-32-19.ap-southeast-2.compute.internal" : "DC1",
   "ip-172-31-33-133.ap-southeast-2.compute.internal": "AZ1",
@@ -59,6 +61,7 @@ function getMyDetails() {
             };
 
             console.log("output:\n" + JSON.stringify(output,null,4) );
+            test_output_global = output;
             return output;
 
       } else {
@@ -211,8 +214,9 @@ app.get('/pagecount', function (req, res) {
 
 app.get('/kubes', function (req, res) {
     
-    //res.send(JSON.stringify(myDetails,null,4));
-    res.send(getMyDetails());
+    console.log("/kubes, myDetails: " + JSON.stringify(myDetails,null,4));
+    console.log("/kubes, test_output_global: " + JSON.stringify(test_output_global,null,4));
+    res.send(test_output_global);
 })
 
 // error handling
