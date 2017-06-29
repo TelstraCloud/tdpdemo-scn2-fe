@@ -34,7 +34,7 @@ function getMyDetails() {
     var project_info;
 
     request(url, function(err,res,body){
-      if (!error && response.statusCode === 200) {
+      if (!err && res.statusCode === 200) {
             project_info = body;
       } else {
         console.log("error retreiving TDP-API info: " + err);
